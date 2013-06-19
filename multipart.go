@@ -3,6 +3,7 @@ package httpclient
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"os"
 	"path/filepath"
@@ -45,6 +46,11 @@ func (f *Form) Close() {
 	for _, fh := range f.handles {
 		fh.Close()
 	}
+}
+
+func (f *Form) Dump() (buf []byte) {
+    buf, _ = ioutil.ReadAll(f.Reader)
+    return
 }
 
 func (f *Form) Create() (err error) {

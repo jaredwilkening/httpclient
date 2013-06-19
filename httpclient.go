@@ -1,10 +1,7 @@
 package httpclient
 
 import (
-	"bytes"
 	"crypto/tls"
-	"errors"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -34,10 +31,8 @@ func SetBasicAuth(username, password string) {
 }
 
 func Do(t string, url string, header Header, data io.Reader) (*http.Response, error) {
-	//trans := newTransport()
-	output := &bytes.Buffer{}
+	trans := newTransport()
 	req, err := http.NewRequest(t, url, data)
-	req.TransferEncoding = []string{"identity"}
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +44,9 @@ func Do(t string, url string, header Header, data io.Reader) (*http.Response, er
 		}
 	}
 	for k, v := range header {
-		print(k + ": " + v + "\n")
 		req.Header.Add(k, v)
 	}
-	fmt.Printf("%#v\n", req.Header)
-	req.Write(output)
-	fmt.Println(output)
-	return nil, errors.New("blah") //trans.RoundTrip(req)
+	return trans.RoundTrip(req)
 }
 
 func Get(url string, header Header, data io.Reader) (resp *http.Response, err error) {
