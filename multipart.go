@@ -74,7 +74,7 @@ func (f *Form) Create() (err error) {
 		readers = append(readers, bytes.NewBufferString(buf.String()))
 		f.Length += int64(buf.Len())
 		buf.Reset()
-		if file.p != "" {
+		if file.p == "" {
 		    f.Length += file.size
 		    readers = append(readers, file.r)
 	    } else {
